@@ -1,0 +1,47 @@
+FiveFixGame.java:
+    ArrayList<Point> points = new ArrayList<>();
+   static boolean regretButtonDown = false;
+private void regret(){
+        if(points.size() >0){
+            int row = points.get(points.size() - 1).x;
+            int col = points.get(points.size() - 1).y;
+            points.remove(points.size() - 1);
+            cellInt[row][col] = 0;
+            Platform.runLater(() -> boardPane.regret(row, col));
+        }        
+    }
+ public void sendRegretRequest()throws IOException{
+        output.writeInt(ME_REGRET);
+    }
+ private void receiveMove() throws IOException{
+	……
+	else if(status == ME_REGRET){ //对方发来悔棋信号
+            
+        }
+}
+
+
+class Point{
+        int x;
+        int y;
+        Point(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+BottomGamePane.java
+
+ btnRegret.setVisible(false);
+        btnRegret.setOnAction(e -> {//悔棋
+            FiveFixGame.regretButtonDown = true;
+        });
+
+five_fix_constants.java
+
+    public static int ME_REGRET = 1;
+
+boardPane.java
+void regret(int row, int col) {
+        cells[row][col].setToken(' ');
+    }
