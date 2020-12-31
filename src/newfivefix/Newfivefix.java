@@ -52,21 +52,21 @@ public class Newfivefix extends Application {
     ServerSocket serverSocket;
     static HashMap<String, Socket> socketToClientMap = new HashMap<>();
     static Stage stageNotification, stageBuild, stageJoin, stageGame, stageRestart;
-    static Label lblNotification = new Label("");
+    static Label lblNotification;
 
     
-    Button btnNotificateSure = new Button("朕知道了");
-    static ListPane listServer = new ListPane(false);
-    static ListPane listClient = new ListPane(true);
+    Button btnNotificateSure ;
+    static ListPane listServer;
+    static ListPane listClient;
     static int usePort = 8989;
-    Text textPortLog = new Text("服务器占用端口为:" + usePort + "\n");
+    Text textPortLog;
     boolean isServerOn = true;
     boolean isSearchOn = true;
     static BorderPane gamePane = new BorderPane();
-    static BoardPane boardPane = new BoardPane();
-    static TopGamePane topPane = new TopGamePane();
-    static BottomGamePane bottomPane = new BottomGamePane();
-    static Text txtWinMsg = new Text("");
+    static BoardPane boardPane;
+    static TopGamePane topPane ;
+    static BottomGamePane bottomPane ;
+    static Text txtWinMsg ;
     static Thread serverThread, searchThread;
     static String selfIp_str = "";
     private static ArrayList<String> selfIp_list = new ArrayList<>();
@@ -74,6 +74,16 @@ public class Newfivefix extends Application {
     
     @Override
     public void start(Stage stageChoose) {
+        lblNotification = new Label("");
+        btnNotificateSure = new Button("朕知道了");
+        listServer = new ListPane(false);
+        listClient = new ListPane(true);
+        textPortLog = new Text("服务器占用端口为:" + usePort + "\n");
+        textPortLog = new Text("服务器占用端口为:" + usePort + "\n");
+        txtWinMsg = new Text("");
+        boardPane = new BoardPane();
+        topPane = new TopGamePane();
+        bottomPane = new BottomGamePane();
         getSelfIpS();
         initStageNotification();
         initStageBuild();
@@ -391,6 +401,12 @@ public class Newfivefix extends Application {
         if(searchThread == null){
             searchThread = new Thread(() -> {
                 while(isSearchOn){
+                    //检查listServer中的ip服务器有没有退出的
+                    for(String ip: listServer.ipsList){
+                        if(!checkIPPort(ip, usePort)){
+                            Platform.runLater(() -> listServer.deleteItem(ip));
+                        }
+                    }
                     //检查自身电脑上有没有运行服务器
                     if(checkIPPort("127.0.0.1", usePort))//自己电脑上有服务器
                         Platform.runLater(() -> {
