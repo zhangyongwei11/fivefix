@@ -175,6 +175,11 @@ public class TopGamePane extends GridPane{
     }
     void saveGrade(){
         try {
+              if(!file.getParentFile().exists()){
+                file.getParentFile().mkdir();
+            }
+            if(!file.exists())
+                file.createNewFile();
             OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), "utf-8");
             output.write("my_history_grade:" + mytotalGames + "," + mywinGames + "," + myfailGames + "," + myflatGames + "\r\n");
             for(String str: otherIpGrade){               
